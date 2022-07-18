@@ -1,41 +1,39 @@
-# This program take maximum 5 data values from the user and show them on the terminal
+from datetime import datetime
+import time
+try:
+    total = int(input("How much data do you want to enter? "))
+    today = time.time()
+    reminders = []
+    for t in range(0, total):
+        date = input("Please enter a date: (yyyy-mm-dd) ")
+        t = input("Please enter a time: (hh:mm) ")
+        print("")
+        reminders.append((f'''{date} {t}:00''', f'''({date} - {t})'''))
+    print("Thank you very much. I will notify them!")
+    print("...")
 
+    reminders2 = {datetime.fromisoformat(
+        reminder[0]).timestamp(): reminder[1] for reminder in reminders}
 
-Numbers = ['first', 'second', 'third', 'fourth', 'fifth']  # List to show the values number on terminal
-datetime_data = []  # initializing the list to append date and time together
-Val_invalid = 1
+    labels = {
+        "1": "First",
+        "2": "Second",
+        "3": "Third",
+        "4": "Fourth",
+        "5": "Fifth"
+    }
+    current = 1
+    while len(reminders2) > 0:
+        now = time.time()
+        for timestamp, reminder_msg in reminders2.items():
+            if timestamp < now:
 
-Data = int(input('How much data you want to enter in between 1-5?\n'))
+                print(
+                    f"""The {labels[str(current)]} date {'has been' if timestamp > today else 'was'} reached! {reminder_msg}""")
+                current += 1
+                del reminders2[timestamp]
+                break
+        time.sleep(1)  # in seconds
 
-if 0 < Data < 6:  # Check if the input data is in required range
-    print(Data)
-else:
-    print("Input Data is not in range")
-
-for x in range(Data):  # Loop to enter Time and date
-    Date = input('please enter a date: (Format : TT.MM.YYYY)\n')
-    dd, mm, yy = Date.split('.')
-    dd = int(dd)
-    mm = int(mm)
-    if 0 < dd < 32 and 0 < mm < 13 and len(yy) == 4:
-        print('Value is valid')
-    else:
-        Val_invalid = 0
-        break
-    Time = input('please enter a time:(Format : HH.MM)\n')
-    hh, nn = Time.split('.')
-    hh = int(hh)
-    nn = int(nn)
-    if 0 <= hh < 25 and 0 <= nn < 61:
-        print('Value is valid')
-    else:
-        Val_invalid = 0
-        break
-    datetime_data.append(Date + '-' + Time)
-
-print("Thank you so much. I will notify them! ")
-if Val_invalid == 1:
-    for x in range(Data):  # loop to print the values on the terminal in their sequence
-        print("The " + Numbers[x] + " date has been reached! " + datetime_data[x])
-else:
-    print('Value is invalid start again')
+except Exception as ex:
+    print("Error occured", str(ex))
