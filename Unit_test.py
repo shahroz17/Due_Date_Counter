@@ -1,11 +1,11 @@
 import unittest
-import DueDate
+import main
 
 
 class TestTask(unittest.TestCase):
 
     def test_range(self):
-        result = DueDate.total <= 5
+        result = main.total <= 5
         self.assertTrue(result)
 
 
